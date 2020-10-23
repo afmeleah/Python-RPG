@@ -1,3 +1,6 @@
+import item
+
+
 class Unit:
     def __init__(self, name, position, health = 10, attack_power = 2):
         self.name = name
@@ -7,10 +10,7 @@ class Unit:
         self.defense = 0
 
     def get_hit(self, power):
-        self.health = self.health - (power - self.defense)
-
-    def is_alive(self):
-        self.health > 0      
+        self.health = self.health - (power - self.defense)     
 
     def attack(self, enemy):           
         enemy.get_hit(self.attack_power)
@@ -44,6 +44,11 @@ class Player(Unit):
         self.inventory.append(item)
         item.get_picked_up(self)
 
+
+class Mob(Unit):
+    def __init__(self, name, position, health = 10, attack_power = 2):
+        super().__init__(name,position,health,attack_power)
+        self.item = item
 
 
 
