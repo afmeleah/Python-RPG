@@ -1,5 +1,11 @@
-import worldmap
+import worldmap, colors
 from player import Player
+from subprocess import call 
+import os 
+
+def clear(): 
+    call('clear' if os.name =='posix' else 'cls') 
+
 
 def play():
     worldmap.load_tiles()
@@ -10,15 +16,16 @@ def play():
         room = worldmap.tile_exists(player.location_x, player.location_y)
         room.modify_player(player)
         if player.is_alive() and not player.victory:
-            print("Choose an action:\n")
+            print("What would you like to do?\n")
             available_actions = room.available_actions()
             for action in available_actions:
                 print(action)
             action_input = input('Action: ')
+            clear()
             for action in available_actions:
                 if action_input == action.hotkey:
                     player.do_action(action, **action.kwargs)
                     break
+        
 
-if __name__ == "__main__":
-    play()
+play()

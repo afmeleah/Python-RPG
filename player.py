@@ -1,4 +1,5 @@
 import item, worldmap, random
+from colors import Colors
  
 class Player():
     def __init__(self):
@@ -35,22 +36,23 @@ class Player():
             best_weapon = None
             max_dmg = 0
             for i in self.inventory:
-                if isinstance(i, item.Weapon):
+                if isinstance(i, item.Weapon): 
                     if i.damage > max_dmg:
                         max_dmg = i.damage
                         best_weapon = i
+            #this checks if any items in the inventory are weapons in the item class. It'll grab the best weapon from inv and use it.
 
-            print("You use {} against {}!".format(best_weapon.name, enemy.name))
+            print(f"{Colors.WARNING}You use {best_weapon.name} against {enemy.name}!{Colors.ENDC}")
             enemy.hp -= best_weapon.damage
             if not enemy.is_alive():
-                print("You killed {}!".format(enemy.name))
+                print(f"{Colors.WARNING}You killed {enemy.name}!{Colors.ENDC}")
             else:
-                print("{} HP is {}.".format(enemy.name, enemy.hp))
+                print(f"{Colors.WARNING}{enemy.name} HP is {enemy.hp}.{Colors.ENDC}")
 
     def do_action(self, action, **kwargs):
-        action_method = getattr(self, action.method.__name__)
+        action_method = getattr(self, action.method.__name__) #the getattr searches for the method in the action class
         if action_method:
-            action_method(**kwargs)
+            action_method(**kwargs) #the kwargs is needed if the method that is found needs additional objects like the attack method
 
     def flee(self, tile):
         available_moves = tile.adjacent_moves()
@@ -63,9 +65,10 @@ class Action():
         self.hotkey = hotkey
         self.name = name
         self.kwargs = kwargs
- 
+ # the kwargs is used to grab a certain action of its parameters are met like the attack action or flee.
+
     def __str__(self):
-        return "{}: {}".format(self.hotkey, self.name)
+        return f"{self.hotkey}: {self.name}"
 
 class MoveNorth(Action):
     def __init__(self):
@@ -93,4 +96,4 @@ class Attack(Action):
 
 class Flee(Action):
     def __init__(self, tile):
-        super().__init__(method=Player.flee, name="Flee", hotkey='f', tile=tile)
+        super().__init__(method=Player.flee, name="Run", hotkey='f', tile=tile)

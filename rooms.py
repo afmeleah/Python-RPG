@@ -1,4 +1,5 @@
-import item, enemies, player, worldmap, colors
+import item, enemies, worldmap, player
+from colors import Colors
 
 class MapTile:
     def __init__(self, x, y):
@@ -23,19 +24,19 @@ class MapTile:
             moves.append(player.MoveSouth())
         return moves
  
-def available_actions(self):
-    moves = self.adjacent_moves()
-    moves.append(player.ViewInventory())
- 
-    return moves
+    def available_actions(self):
+        moves = self.adjacent_moves()
+        moves.append(player.ViewInventory())
+    
+        return moves
 
 class StartingRoom(MapTile):
     def intro_text(self):
-        return """
+        print(f"""{Colors.WARNING}
         The Halloweeners control this level of the Megaplex. It shows. The walls are
         covered in graffiti and scorch marks. Halloweeners do love their fire.
         You have a job to do. Time to get to work.
-        """
+        {Colors.ENDC}""")
 
     def modify_player(self, player):
         pass
@@ -55,12 +56,6 @@ class EmptyPath(MapTile):
     def modify_player(self, player):
         pass
 
-    def available_actions(self):
-        moves = self.adjacent_moves()
-        moves.append(player.ViewInventory())
- 
-        return moves
-
 class LootRoom(MapTile):
     def __init__(self, x, y, item):
         self.item = item
@@ -72,12 +67,6 @@ class LootRoom(MapTile):
     def modify_player(self, player):
         self.add_loot(player)
 
-    def available_actions(self):
-        moves = self.adjacent_moves()
-        moves.append(player.ViewInventory())
- 
-        return moves
-
 class EnemyRoom(MapTile):
     def __init__(self, x, y, enemy):
         self.enemy = enemy
@@ -86,7 +75,7 @@ class EnemyRoom(MapTile):
     def modify_player(self, player):
         if self.enemy.is_alive():
             player.hp = player.hp - self.enemy.damage
-            print(f"Enemy does {self.enemy.damage} damage. You have {player.hp} HP remaining.")
+            print(f"{Colors.WARNING}Enemy does {self.enemy.damage} damage. You have {player.hp} HP remaining.{Colors.ENDC}")
 
     def available_actions(self):
         if self.enemy.is_alive():
@@ -96,11 +85,11 @@ class EnemyRoom(MapTile):
 
 class PaydataRoom(MapTile):
     def intro_text(self):
-        return """
+        print(f"""{Colors.OKGREEN}
         You found the paydata, and your job is done.
          
         Good job on that milk run, chummer.
-        """
+        {Colors.ENDC}""")
  
     def modify_player(self, player):
         player.victory = True
@@ -111,14 +100,15 @@ class HalloweenerRoom(EnemyRoom):
 
     def intro_text(self):
         if self.enemy.is_alive():
-            return """"
-            You enter the run-down apartment. Some trid plays in the background.
+            print(f"""{Colors.WARNING}
+        You enter the run-down apartment. Some trid plays in the background.
             There's a crash as the Halloweener inside scrambles for his gun.
-            """
+        {Colors.ENDC}""")
+
         else:
-            return """
-            The corpse of the Halloweener lies where you left it.
-            """
+            print(f"""{Colors.WARNING}
+        The corpse of the Halloweener lies where you left it.
+        {Colors.ENDC}""")
 
 class JunkieRoom(EnemyRoom):
     def __init__(self,x, y):
@@ -126,15 +116,18 @@ class JunkieRoom(EnemyRoom):
 
     def intro_text(self):
         if self.enemy.is_alive():
-            return """"
-            You enter what looks to be a drug den. Several bodies lay splayed out around the room.
+            print(f"""{Colors.WARNING}
+        You enter what looks to be a drug den. Several bodies lay splayed out around the room.
             You check them and their eyes roll back lost in stupor. One of the BTL
             Junkies in the corner leap up and rush at you.
-            """
+        {Colors.ENDC}""")
+
         else:
-            return """
-            The corpse of the BTL Junkie lies where you left it.
-            """
+            print(f"""{Colors.WARNING}
+        The corpse of the BTL Junkie lies where you left it.
+        {Colors.ENDC}""")
+
+        
 
 class StreetSamRoom(EnemyRoom):
     def __init__(self,x, y):
@@ -142,57 +135,58 @@ class StreetSamRoom(EnemyRoom):
 
     def intro_text(self):
         if self.enemy.is_alive():
-            return """"
+            print(f"""{Colors.FAIL}
             You see before you the cleanest room that you've come across so far.
             It looks to be the lab where the gangers cook their drugs. Its guard notices you
             and rushes forward. His mechanical arm opening up to reveal a blade.
-            """
-        else:
-            return """
-            The corpse of the Street Samurai lies where you left it.
-            """
+        {Colors.ENDC}""")
 
-class FindPistolRoom(LootRoom):
-    def __init__(self, x, y):
-        super().__init__(x, y, item.Pistol())
- 
-    def intro_text(self):
-        return """
-        You walk into what appears to be a common room. 
-        You notice something shiny in the corner.
-        It's a pistol! You pick it up.
-        """
+        else:
+            print(f"""{Colors.FAIL}
+        The corpse of the Street Samurai lies where you left it.
+        {Colors.ENDC}""")
+
 
 class FindRifleRoom(LootRoom):
     def __init__(self, x, y):
         super().__init__(x, y, item.Rifle())
  
     def intro_text(self):
-        return """
+        print(f"""{Colors.OKBLUE}
         You walk into what appears to be the gang's makeshift armory. 
         As you sift through the room, you find something that stands out.
-        It's a rifle! You pick it up.
-        """
+        It's a rifle! You pick it up.{Colors.ENDC}
+        """)
 
 class FindCredsRoom(LootRoom):
     def __init__(self, x, y):
         super().__init__(x, y, item.Credchip(10))
  
     def intro_text(self):
-        return """
+        print(f"""{Colors.OKBLUE}
         You find a room that seems to hold nothing of importance. 
         Hold on a second. You see something on the ground
-        It's a credchip! You pick it up.
-        """
+        It's a credchip! You pick it up.{Colors.ENDC}
+        """)
 
 class FindBatRoom(LootRoom):
     def __init__(self, x, y):
         super().__init__(x, y, item.Bat())
  
     def intro_text(self):
-        return """
+        print(f""" {Colors.OKBLUE}
         You enter the room and find what looks to be some civilian's room.
         On your way out of the room, you notice something behind the front door.
-        It's a bat! You pick it up.
-        """
+        It's a bat! You pick it up.{Colors.ENDC}
+        """)
 
+class FindPistolRoom(LootRoom):
+    def __init__(self, x, y):
+        super().__init__(x, y, item.Pistol())
+ 
+    def intro_text(self):
+        print(f"""{Colors.OKBLUE}
+        You walk into what appears to be a common room. 
+        You notice something shiny in the corner.
+        It's a pistol! You pick it up.{Colors.ENDC}
+        """)
