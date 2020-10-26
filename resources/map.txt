@@ -1,0 +1,7 @@
+StreetSamRoom	FindCredsRoom	EmptyPath	HalloweenerRoom	FindRifleRoom
+PaydataRoom		EmptyPath		
+		EmptyPath		
+HalloweenerRoom	EmptyPath	StartingRoom	EmptyPath	FindPistolRoom
+		FindCredsRoom		
+		EmptyPath		
+	EmptyPath	FindBatRoom	EmptyPath	JunkieRoom
