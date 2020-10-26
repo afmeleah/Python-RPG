@@ -10,7 +10,7 @@ class MapTile:
         raise NotImplementedError()
 
     def modify_player(self, player):
-        raise NotImplementedError()
+        raise NotImplementedError() #is there because there should never be a MapTile used directly. This'll pop up and stop it.
 
     def adjacent_moves(self):
         moves = []

@@ -23,7 +23,7 @@ def play():
             action_input = input('Action: ')
             clear()
             for action in available_actions:
-                if action_input == action.hotkey:
+                if action_input == action.hotkey: #Makes it so that the player will only move on if they enter one of their available actions
                     player.do_action(action, **action.kwargs)
                     break
         
